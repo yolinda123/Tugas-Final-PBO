@@ -1,0 +1,58 @@
+# Inisialisasi daftar buku
+$buku = @()
+
+# Fungsi untuk menampilkan menu
+function Tampilkan-Menu {
+    Write-Host "=== Aplikasi Pencatatan Buku ==="
+    Write-Host "1. Tambah Buku"
+    Write-Host "2. Lihat Daftar Buku"
+    Write-Host "3. Simpan ke File"
+    Write-Host "4. Keluar"
+}
+
+# Fungsi untuk menambah buku
+function Tambah-Buku {
+    $judul = Read-Host "Masukkan judul buku"
+    $pengarang = Read-Host "Masukkan pengarang"
+    $isbn = Read-Host "Masukkan ISBN"
+    $tahun = Read-Host "Masukkan tahun terbit"
+    
+    # Tambahkan buku ke dalam array
+    $buku += [PSCustomObject]@{
+        Judul = $judul
+        Pengarang = $pengarang
+        ISBN = $isbn
+        Tahun = $tahun
+    }
+    Write-Host "Buku berhasil ditambahkan!"
+}
+
+# Fungsi untuk menampilkan daftar buku
+function Lihat-DaftarBuku {
+    if ($buku.Count -eq 0) {
+        Write-Host "Belum ada buku yang dicatat."
+    } else {
+        Write-Host "=== Daftar Buku ==="
+        $buku | Format-Table -AutoSize
+    }
+}
+
+# Fungsi untuk menyimpan ke file
+function Simpan-KeFile {
+    $file = "DaftarBuku.txt"
+    $buku | Out-File -FilePath $file -Encoding UTF8
+    Write-Host "Data buku berhasil disimpan ke file $file."
+}
+
+# Program utama
+do {
+    Tampilkan-Menu
+    $pilihan = Read-Host "Pilih menu (1-4)"
+    switch ($pilihan) {
+        1 { Tambah-Buku }
+        2 { Lihat-DaftarBuku }
+        3 { Simpan-KeFile }
+        4 { Write-Host "Keluar dari aplikasi." }
+        default { Write-Host "Pilihan tidak valid, coba lagi." }
+    }
+} while ($pilihan -ne 4)
